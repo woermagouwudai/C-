@@ -1,0 +1,43 @@
+在visual studio中：
+头文件通常包含类、结构体、函数的声明、宏定义和类型定义等，通常存放函数原型、类的声明、常量第一和类型别名，其目的是提供接口和声明，以便在源文件中使用
+源文件通常函数和类的具体实现代码。
+
+举例说明：
+一个math_functions.h的头文件和math_functions.cpp的源文件
+math_functions.h:
+#ifndef MATH_FUNTIONS_H
+#define MATH_FUNCTIONS_H
+
+int Add(inta, intb);
+double Square(double num);
+
+#endif
+
+math_functions.cpp:
+#include "math_functions.h"
+
+int Add(int a, int b)
+{
+  return a + b;
+}
+
+double Square(double num)
+{
+  return num * num;
+}
+
+在这个例子中，头文件math_functions.h中包含了两个函数的声明：Add和Square。源文件math_functions.cpp中实现了这两个函数的具体定义。通过将函数的声明放在头文件中，其他源文件可以引用这些函数而无需重复声明。在其他源文件中，我们可以通过包含头文件math_functions.h来使用这些函数的声明，并在需要时调用这些函数的实现。
+
+在main.cpp源文件，可以调用函数
+#include "math_functions.h"
+#include <iostream>
+
+int main() 
+{
+    int sum = Add(2, 3);
+    double result = Square(5.0);
+    std::cout << "Sum: " << sum << std::endl;
+    std::cout << "Square: " << result << std::endl;
+    return 0;
+}
+这个例子中，main.cpp通过包含头文件math_functions.h来引用数学函数的声明，并在main函数中调用了这些函数的实现。编译时，编译器会将main.cpp和math_functions.cpp一起编译成可执行文件，以实现对数学函数的调用和计算。
