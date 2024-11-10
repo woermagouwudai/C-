@@ -1,0 +1,42 @@
+Myresource(const Myresource& other):data(new int[100]){
+		std::copy(other.data, other.data + 100, data);
+	}
+	Myresource(const Myresource& other) :data(new int(*(other.data))) {}这两段代码的结果是否等效
+
+这两段代码的结果不等效。主要区别在于它们处理 data 指针所指向的内存的方式不同。
+
+让我们逐行分析这两段代码的区别。
+
+第一段代码
+cpp
+复制代码
+MyResource(const MyResource& other) : data(new int[100]) {
+    std::copy(other.data, other.data + 100, data);
+}
+分析：
+
+数据结构：这里假设 data 是一个指向 int 数组的指针（即 int* data;），指向一个包含 100 个 int 元素的数组。
+实现细节：new int[100] 为当前对象分配了一个大小为 100 的独立 int 数组。
+数据复制：使用 std::copy 将 other.data 数组中的 100 个整数复制到当前对象的 data 数组中，实现了深拷贝。
+结果：当前对象的 data 指针指向一个新的数组，与 other.data 指向的数组独立，从而避免了共享内存的问题。
+第二段代码
+cpp
+复制代码
+MyResource(const MyResource& other) : data(new int(*(other.data))) {}
+分析：
+
+数据结构：这里假设 data 是一个指向单个 int 的指针（即 int* data;），指向一个 int 值。
+实现细节：new int(*(other.data)) 分配了一个单独的 int 内存空间，并将 other.data 指针指向的第一个 int 值复制过来。
+结果：当前对象的 data 只指向一个 int 值（即 other.data 数组的第一个元素）。它并没有复制整个数组的内容，只是简单地复制了 other.data 指向的第一个整数。
+总结
+第一段代码：假设 data 是指向 int 数组的指针（大小为 100）。此代码实现了数组的深拷贝，当前对象的 data 指向与 other.data 相同大小（100 个整数）的独立副本。
+
+第二段代码：假设 data 是指向单个 int 的指针。此代码仅复制了 other.data 数组的第一个元素到新分配的 int，没有复制整个数组。
+
+因此，这两段代码的效果并不等效。如果 data 指向的是一个 int 数组，且需要复制整个数组的内容，那么第一段代码才是正确的深拷贝实现。
+
+
+
+
+
+
